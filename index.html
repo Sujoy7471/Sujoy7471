@@ -405,7 +405,7 @@ canvas{
 
 <div id="creditOverlay">
 
-    <button id="backButton">
+    <div id="backButton">
         ← Back
     </div>
 
@@ -573,7 +573,7 @@ renderer.autoClear = false;
 const starGeometry =
     new THREE.BufferGeometry();
 
-const starCount = 4000;
+const starCount = 1000;
 
 const starPositions =
     new Float32Array(starCount*3);
@@ -623,7 +623,7 @@ scene.add(stars);
 // DISK
 // =======================================
 
-const discParticleCount = 250000;
+const discParticleCount = 25000;
 
 const positions =
     new Float32Array(
@@ -718,13 +718,13 @@ discGeometry.setAttribute(
 const discMaterial =
     new THREE.PointsMaterial({
 
-        size:0.12,
+        size:0.26,
 
         vertexColors:true,
 
         transparent:true,
 
-        opacity:0.11,
+        opacity:0.22,
 
         depthWrite:false,
 
@@ -827,7 +827,7 @@ const perp2 =
 // COLLIMATED JETS
 // =======================================
 
-const jetParticleCount = 10000;
+const jetParticleCount = 2500;
 
 const jetPositions =
     new Float32Array(
@@ -943,13 +943,13 @@ jetGeometry.setAttribute(
 const jetMaterial =
     new THREE.PointsMaterial({
 
-        size:0.15,
+        size:0.25,
 
         vertexColors:true,
 
         transparent:true,
 
-        opacity:0.31,
+        opacity:0.35,
 
         depthWrite:false,
 
