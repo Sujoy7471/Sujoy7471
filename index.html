@@ -797,6 +797,175 @@ scene.add(glow);
 
 
 // =======================================
+// JET AXIS
+// =======================================
+
+const jetAxis =
+    new THREE.Vector3(
+        0.0275,
+        1.2,
+        -0.14
+    ).normalize();
+
+
+// =======================================
+// BASIS VECTORS
+// =======================================
+
+const perp1 =
+    new THREE.Vector3(1,0,0)
+    .cross(jetAxis)
+    .normalize();
+
+const perp2 =
+    jetAxis.clone()
+    .cross(perp1)
+    .normalize();
+
+
+// =======================================
+// COLLIMATED JETS
+// =======================================
+
+const jetParticleCount = 10000;
+
+const jetPositions =
+    new Float32Array(
+        jetParticleCount * 3
+    );
+
+const jetColors =
+    new Float32Array(
+        jetParticleCount * 3
+    );
+
+const jetVelocities = [];
+const jetDirections = [];
+const jetOffsets = [];
+
+const jetColor =
+    new THREE.Color();
+
+for(let i=0;i<jetParticleCount;i++){
+
+    const dir =
+        Math.random()<0.5
+        ? 1
+        : -1;
+
+    const spread = 1;
+
+    const r =
+        Math.random()*spread;
+
+    const theta =
+        Math.random()*2*Math.PI;
+
+    const offset =
+        perp1.clone()
+        .multiplyScalar(
+            r*Math.cos(theta)
+        )
+
+        .add(
+            perp2.clone()
+            .multiplyScalar(
+                r*Math.sin(theta)
+            )
+        );
+
+    const launch =
+        dir*Math.random()*140;
+
+    const base =
+        jetAxis.clone()
+        .multiplyScalar(launch);
+
+    const pos =
+        base.add(offset);
+
+    jetPositions[i*3] = pos.x;
+    jetPositions[i*3+1] = pos.y;
+    jetPositions[i*3+2] = pos.z;
+
+    jetVelocities.push(
+        dir * (
+            0.45
+            + Math.random()*0.55
+        )
+    );
+
+    jetDirections.push(dir);
+
+    jetOffsets.push(offset);
+
+    jetColor.setHSL(
+        0.78,
+        1.0,
+        0.6
+    );
+
+    const brightness =
+        dir === 1
+        ? 1.0
+        : 0.18;
+
+    jetColors[i*3] =
+        jetColor.r * brightness;
+
+    jetColors[i*3+1] =
+        jetColor.g * brightness;
+
+    jetColors[i*3+2] =
+        jetColor.b * brightness;
+}
+
+
+const jetGeometry =
+    new THREE.BufferGeometry();
+
+jetGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(
+        jetPositions,
+        3
+    )
+);
+
+jetGeometry.setAttribute(
+    'color',
+    new THREE.BufferAttribute(
+        jetColors,
+        3
+    )
+);
+
+const jetMaterial =
+    new THREE.PointsMaterial({
+
+        size:0.15,
+
+        vertexColors:true,
+
+        transparent:true,
+
+        opacity:0.31,
+
+        depthWrite:false,
+
+        blending:
+            THREE.AdditiveBlending
+    });
+
+const jets =
+    new THREE.Points(
+        jetGeometry,
+        jetMaterial
+    );
+
+scene.add(jets);
+
+// =======================================
 // BLOOM
 // =======================================
 
@@ -866,6 +1035,81 @@ function animate(){
         + 0.08*Math.sin(
             performance.now()*0.0004
         );
+
+
+
+
+    // =======================================
+    // JET ANIMATION
+    // =======================================
+
+    const jetPos =
+        jetGeometry.attributes.position.array;
+
+    for(let i=0;i<jetParticleCount;i++){
+
+        const dir =
+            jetDirections[i];
+
+        const speed =
+            jetVelocities[i];
+
+        jetPos[i*3] +=
+            jetAxis.x * speed;
+
+        jetPos[i*3+1] +=
+            jetAxis.y * speed;
+
+        jetPos[i*3+2] +=
+            jetAxis.z * speed;
+
+        const dist =
+            Math.sqrt(
+                jetPos[i*3]**2 +
+                jetPos[i*3+1]**2 +
+                jetPos[i*3+2]**2
+            );
+
+        const widen =
+            0.05 * dist;
+
+        jetPos[i*3] +=
+            (Math.random()-0.5)
+            * widen;
+
+        jetPos[i*3+1] +=
+            (Math.random()-0.5)
+            * widen;
+
+        jetPos[i*3+2] +=
+            (Math.random()-0.5)
+            * widen;
+
+        if(dist > 140){
+
+            const launch =
+                dir*Math.random()*2;
+
+            const base =
+                jetAxis.clone()
+                .multiplyScalar(launch);
+
+            const offset =
+                jetOffsets[i];
+
+            const p =
+                base.add(offset);
+
+            jetPos[i*3] = p.x;
+            jetPos[i*3+1] = p.y;
+            jetPos[i*3+2] = p.z;
+        }
+    }
+
+    jetGeometry
+        .attributes
+        .position
+        .needsUpdate = true;
 
     renderer.clear();
 
