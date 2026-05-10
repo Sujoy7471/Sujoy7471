@@ -21,6 +21,7 @@ body{
 }
 
 
+
 /* =======================================
    VIDEO BACKGROUND
 ======================================= */
@@ -36,6 +37,8 @@ body{
     height:100%;
 
     object-fit:cover;
+
+    transform:scale(1.02);
 
     z-index:-10;
 }
@@ -409,6 +412,37 @@ body{
         scale(1.05);
 }
 
+
+
+/* =======================================
+   MOBILE UI
+======================================= */
+
+@media (max-width: 900px){
+
+    .menu-box{
+
+        width:90vw;
+
+        height:54px;
+    }
+
+    .menu-item{
+
+        font-size:15px;
+
+        padding:
+            8px 12px;
+    }
+
+    #creditText{
+
+        font-size:20px;
+
+        padding:24px;
+    }
+}
+
 </style>
 </head>
 
@@ -425,15 +459,9 @@ body{
     muted
     loop
     playsinline
+    preload="auto"
     id="bgVideo"
->
-
-    <source
-        src="bkg.mp4"
-        type="video/mp4"
-    >
-
-</video>
+></video>
 
 
 
@@ -530,6 +558,39 @@ body{
 
 
 <script>
+
+// =======================================
+// DEVICE-BASED VIDEO LOADING
+// =======================================
+
+const video =
+    document.getElementById(
+        'bgVideo'
+    );
+
+
+if(window.innerWidth < 900){
+
+    video.innerHTML = `
+        <source
+            src="bkg_p.mp4"
+            type="video/mp4"
+        >
+    `;
+
+} else {
+
+    video.innerHTML = `
+        <source
+            src="bkg_d.mp4"
+            type="video/mp4"
+        >
+    `;
+}
+
+video.load();
+
+
 
 // =======================================
 // MENU SYSTEM
