@@ -5,21 +5,32 @@
 
 <meta charset="UTF-8">
 
-<title>Sujoy Karmakar</title>
+<title>Sujoy K Official Website</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
 
 body{
+
     margin:0;
+
     overflow:hidden;
+
     background:black;
-    font-family:Arial,sans-serif;
+
+    font-family:'Orbitron',sans-serif;
+
     position:relative;
 }
 
 canvas{
     display:block;
 }
+
 
 
 /* =======================================
@@ -57,7 +68,7 @@ canvas{
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.291);
+        rgba(255,255,255,0.10);
 
     backdrop-filter:blur(18px);
 
@@ -65,8 +76,8 @@ canvas{
         blur(18px);
 
     box-shadow:
-        0 0 40px rgba(202, 92, 227, 0.15),
-        inset 0 0 25px rgba(173, 129, 216, 0.637);
+        0 0 40px rgba(202, 92, 227, 0.327),
+        inset 0 0 25px rgba(190, 149, 228, 0.524);
 
     display:flex;
 
@@ -81,13 +92,15 @@ canvas{
     opacity:0.92;
 
     pointer-events:auto;
+
+    animation:fadeIn 2s ease;
 }
 
 
 .menu-item{
 
     color:
-        rgba(245, 239, 246, 0.845);
+        rgba(208,194,210,0.75);
 
     text-decoration:none;
 
@@ -110,15 +123,18 @@ canvas{
     color:white;
 
     background:
-        rgba(255,255,255,0.08);
+        rgba(255,255,255,0.10);
 
     box-shadow:
-        0 0 22px
-        rgba(181, 120, 255, 0.403);
+        0 0 30px rgba(180,120,255,0.34),
+        0 0 60px rgba(181, 120, 255, 0.497);
 
     transform:
-        translateY(-2px)
-        scale(1.04);
+        translateY(-3px)
+        scale(1.06);
+
+    text-shadow:
+        0 0 12px rgba(255,255,255,0.7);
 }
 
 
@@ -204,6 +220,65 @@ canvas{
     opacity:0.72;
 }
 
+
+
+/* =======================================
+   MOBILE
+======================================= */
+
+@media(max-width:768px){
+
+    .menu-box{
+
+        width:85vw;
+
+        height:56px;
+
+        border-radius:28px;
+    }
+
+    .menu-item{
+
+        font-size:15px;
+
+        padding:8px 12px;
+    }
+
+    #fadeButton{
+
+        width:58px;
+
+        height:58px;
+
+        top:18px;
+
+        right:18px;
+    }
+}
+
+
+
+/* =======================================
+   ANIMATION
+======================================= */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+    }
+
+    to{
+
+        opacity:0.92;
+
+        transform:translateY(0px);
+    }
+}
+
 </style>
 </head>
 
@@ -224,7 +299,7 @@ canvas{
         </a>
 
         <a class="menu-item" href="research.html">
-            Resarch Work
+            Research Work
         </a>
 
         <a class="menu-item" href="explorations.html">
@@ -280,11 +355,23 @@ import { UnrealBloomPass }
 from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 
+
 // =======================================
 // SCENE
 // =======================================
 
 const scene = new THREE.Scene();
+
+scene.fog = new THREE.FogExp2(
+    0x000000,
+    0.0009
+);
+
+
+
+// =======================================
+// CAMERA
+// =======================================
 
 const camera =
     new THREE.PerspectiveCamera(
@@ -306,6 +393,7 @@ camera.rotation.y =
     THREE.MathUtils.degToRad(-5);
 
 
+
 // =======================================
 // RENDERER
 // =======================================
@@ -323,11 +411,14 @@ renderer.setSize(
     window.innerHeight
 );
 
+renderer.setPixelRatio(1.2);
+
 document.body.appendChild(
     renderer.domElement
 );
 
 renderer.autoClear = false;
+
 
 
 // =======================================
@@ -337,7 +428,7 @@ renderer.autoClear = false;
 const starGeometry =
     new THREE.BufferGeometry();
 
-const starCount = 10000;
+const starCount = 25000;
 
 const starPositions =
     new Float32Array(starCount*3);
@@ -383,11 +474,12 @@ const stars =
 scene.add(stars);
 
 
+
 // =======================================
 // DISK
 // =======================================
 
-const discParticleCount = 25000;
+const discParticleCount = 70000;
 
 const positions =
     new Float32Array(
@@ -482,7 +574,7 @@ discGeometry.setAttribute(
 const discMaterial =
     new THREE.PointsMaterial({
 
-        size:0.26,
+        size:0.18,
 
         vertexColors:true,
 
@@ -508,6 +600,7 @@ disc.rotation.x =
 scene.add(disc);
 
 
+
 // =======================================
 // CENTRAL STAR
 // =======================================
@@ -522,11 +615,12 @@ const star =
         ),
 
         new THREE.MeshBasicMaterial({
-            color:0xffeeaa
+            color:0xfafcff
         })
     );
 
 scene.add(star);
+
 
 
 // =======================================
@@ -560,16 +654,21 @@ const glow =
 scene.add(glow);
 
 
+
 // =======================================
 // JET AXIS
 // =======================================
 
+const diskTilt =
+    THREE.MathUtils.degToRad(10);
+
 const jetAxis =
     new THREE.Vector3(
-        0.0275,
-        1.2,
-        -0.14
+        0,
+        Math.cos(diskTilt),
+        Math.sin(diskTilt)
     ).normalize();
+
 
 
 // =======================================
@@ -587,11 +686,12 @@ const perp2 =
     .normalize();
 
 
+
 // =======================================
 // COLLIMATED JETS
 // =======================================
 
-const jetParticleCount = 2500;
+const jetParticleCount = 8000;
 
 const jetPositions =
     new Float32Array(
@@ -730,6 +830,7 @@ const jets =
 scene.add(jets);
 
 
+
 // =======================================
 // MOVE WHOLE SYSTEM
 // =======================================
@@ -737,7 +838,7 @@ scene.add(jets);
 const systemOffset =
     new THREE.Vector3(
         10,
-        -15,
+        -8,
         0
     );
 
@@ -748,6 +849,7 @@ star.position.copy(systemOffset);
 glow.position.copy(systemOffset);
 
 jets.position.copy(systemOffset);
+
 
 
 // =======================================
@@ -776,6 +878,7 @@ composer.addPass(
 );
 
 
+
 // =======================================
 // ANIMATION
 // =======================================
@@ -789,7 +892,39 @@ function animate(){
     const elapsedTime =
         performance.now()*0.0001;
 
+
+
+    // =======================================
+    // CAMERA DRIFT
+    // =======================================
+
+    camera.position.x =
+        -5
+        + Math.sin(performance.now()*0.00008)*1.5;
+
+    camera.position.y =
+        10
+        + Math.cos(performance.now()*0.00006)*1.2;
+
+
+
+    // =======================================
+    // STARFIELD
+    // =======================================
+
     stars.rotation.y += 0.00008;
+
+    stars.material.opacity =
+        0.65
+        + 0.15*Math.sin(
+            performance.now()*0.00025
+        );
+
+
+
+    // =======================================
+    // DISK ROTATION
+    // =======================================
 
     const pos =
         discGeometry.attributes.position.array;
@@ -815,10 +950,16 @@ function animate(){
         .position
         .needsUpdate = true;
 
-    starMaterial.opacity =
-        0.75
-        + 0.08*Math.sin(
-            performance.now()*0.0004
+
+
+    // =======================================
+    // STAR PULSE
+    // =======================================
+
+    star.material.opacity =
+        0.68
+        + 0.16*Math.sin(
+            performance.now()*0.0007
         );
 
 
@@ -855,7 +996,7 @@ function animate(){
             );
 
         const widen =
-            0.05 * dist;
+            0.08 * dist;
 
         jetPos[i*3] +=
             (Math.random()-0.5)
@@ -895,12 +1036,27 @@ function animate(){
         .position
         .needsUpdate = true;
 
+
+
+    // =======================================
+    // BLOOM PULSE
+    // =======================================
+
+    composer.passes[1].strength =
+        0.9
+        + 0.08*Math.sin(
+            performance.now()*0.001
+        );
+
+
+
     renderer.clear();
 
     composer.render();
 }
 
 animate();
+
 
 
 // =======================================
