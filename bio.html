@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Bio | Sujoy Karmakar</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+
+    overflow-x:hidden;
+
+    background:black;
+
+    color:white;
+
+    font-family:'Inter',sans-serif;
+}
+
+
+
+/* =======================================
+   CANVAS
+======================================= */
+
+canvas{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:-5;
+
+    display:block;
+}
+
+
+
+/* =======================================
+   MAIN CONTAINER
+======================================= */
+
+.main-container{
+
+    width:100%;
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:
+        80px 40px;
+}
+
+
+
+/* =======================================
+   PAPER PANEL
+======================================= */
+
+.paper-panel{
+
+    width:min(1300px,95vw);
+
+    min-height:700px;
+
+    border-radius:42px;
+
+    padding:
+        60px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        rgba(255,255,255,0.055);
+
+    border:
+        1px solid rgba(255,255,255,0.10);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        0 0 60px rgba(180,120,255,0.12),
+        inset 0 0 50px rgba(255,255,255,0.02);
+}
+
+
+
+/* =======================================
+   ROUGH PAPER TEXTURE
+======================================= */
+
+.paper-panel::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        radial-gradient(
+            rgba(255,255,255,0.03) 1px,
+            transparent 1px
+        );
+
+    background-size:4px 4px;
+
+    opacity:0.35;
+
+    pointer-events:none;
+}
+
+
+
+/* =======================================
+   TOP SECTION
+======================================= */
+
+.top-section{
+
+    display:flex;
+
+    gap:60px;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+}
+
+
+
+/* =======================================
+   PROFILE IMAGE
+======================================= */
+
+.profile-image-container{
+
+    width:290px;
+
+    height:380px;
+
+    border-radius:42px;
+
+    overflow:hidden;
+
+    position:relative;
+
+    flex-shrink:0;
+
+    background:
+        rgba(255,255,255,0.04);
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    backdrop-filter:blur(12px);
+
+    box-shadow:
+        0 0 35px rgba(180,120,255,0.18),
+        inset 0 0 25px rgba(255,255,255,0.04);
+
+    transition:
+        transform 0.5s ease,
+        box-shadow 0.5s ease;
+}
+
+
+.profile-image-container:hover{
+
+    transform:
+        translateY(-6px)
+        scale(1.02);
+
+    box-shadow:
+        0 0 55px rgba(180,120,255,0.28),
+        inset 0 0 35px rgba(255,255,255,0.06);
+}
+
+
+.profile-image{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    filter:
+        contrast(1.02)
+        brightness(0.98);
+
+    transition:
+        transform 0.6s ease;
+}
+
+
+.profile-image:hover{
+
+    transform:scale(1.03);
+}
+
+
+
+/* =======================================
+   BIO CONTENT
+======================================= */
+
+.bio-content{
+
+    flex:1;
+
+    min-width:300px;
+}
+
+
+.name{
+
+    font-family:'Orbitron',sans-serif;
+
+    font-size:58px;
+
+    font-weight:700;
+
+    line-height:1.1;
+
+    margin-bottom:18px;
+
+    color:white;
+
+    text-shadow:
+        0 0 20px rgba(180,120,255,0.3);
+}
+
+
+.title{
+
+    font-size:18px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
+
+    color:
+        rgba(220,200,255,0.75);
+
+    margin-bottom:28px;
+}
+
+
+.bio-text{
+
+    font-size:17px;
+
+    line-height:1.9;
+
+    color:
+        rgba(255,255,255,0.82);
+
+    max-width:820px;
+}
+
+
+
+/* =======================================
+   INFO GRID
+======================================= */
+
+.info-grid{
+
+    margin-top:50px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(260px,1fr));
+
+    gap:22px;
+}
+
+
+.info-card{
+
+    padding:24px;
+
+    border-radius:24px;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(10px);
+
+    transition:
+        transform 0.4s ease,
+        background 0.4s ease;
+}
+
+
+.info-card:hover{
+
+    transform:
+        translateY(-4px);
+
+    background:
+        rgba(255,255,255,0.06);
+}
+
+
+.info-title{
+
+    font-family:'Orbitron',sans-serif;
+
+    font-size:15px;
+
+    letter-spacing:2px;
+
+    color:
+        rgba(210,180,255,0.9);
+
+    margin-bottom:14px;
+
+    text-transform:uppercase;
+}
+
+
+.info-content{
+
+    line-height:1.8;
+
+    color:
+        rgba(255,255,255,0.82);
+
+    font-size:15px;
+}
+
+
+
+/* =======================================
+   SOCIALS
+======================================= */
+
+.socials{
+
+    margin-top:50px;
+
+    display:flex;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+}
+
+
+.social-link{
+
+    padding:
+        14px 24px;
+
+    border-radius:18px;
+
+    text-decoration:none;
+
+    color:white;
+
+    background:
+        rgba(255,255,255,0.045);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(10px);
+
+    transition:
+        all 0.35s ease;
+}
+
+
+.social-link:hover{
+
+    background:
+        rgba(255,255,255,0.10);
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 0 24px rgba(180,120,255,0.22);
+}
+
+
+
+/* =======================================
+   BACK BUTTON
+======================================= */
+
+.back-button{
+
+    position:fixed;
+
+    top:26px;
+
+    left:26px;
+
+    padding:
+        14px 22px;
+
+    border-radius:18px;
+
+    text-decoration:none;
+
+    color:white;
+
+    background:
+        rgba(255,255,255,0.05);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(12px);
+
+    z-index:1000;
+
+    transition:
+        all 0.35s ease;
+}
+
+
+.back-button:hover{
+
+    background:
+        rgba(255,255,255,0.10);
+
+    transform:
+        translateY(-2px);
+}
+
+
+
+/* =======================================
+   MOBILE
+======================================= */
+
+@media(max-width:900px){
+
+    .paper-panel{
+
+        padding:36px 28px;
+    }
+
+    .top-section{
+
+        flex-direction:column;
+
+        align-items:center;
+
+        text-align:center;
+    }
+
+    .profile-image-container{
+
+        width:240px;
+
+        height:320px;
+    }
+
+    .name{
+
+        font-size:42px;
+    }
+
+    .bio-text{
+
+        font-size:16px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+
+<!-- =======================================
+     BACK BUTTON
+======================================= -->
+
+<a
+    href="index.html"
+    class="back-button"
+>
+    ← Home
+</a>
+
+
+
+<!-- =======================================
+     MAIN CONTENT
+======================================= -->
+
+<div class="main-container">
+
+    <div class="paper-panel">
+
+
+        <!-- =======================================
+             TOP SECTION
+        ======================================= -->
+
+        <div class="top-section">
+
+
+            <!-- =======================================
+                 IMAGE
+            ======================================= -->
+
+            <div class="profile-image-container">
+
+                <img
+                    src="profile_pic.png"
+                    alt="Sujoy Karmakar"
+                    class="profile-image"
+                >
+
+            </div>
+
+
+
+            <!-- =======================================
+                 BIO
+            ======================================= -->
+
+            <div class="bio-content">
+
+                <div class="name">
+                    Sujoy Karmakar
+                </div>
+
+                <div class="title">
+                    Astronomy & Astrophysics • Instrumentation • Computational Research
+                </div>
+
+                <div class="bio-text">
+
+                    I am an Integrated PhD student in Astronomy and Astrophysics at
+                    TIFR Mumbai with interests spanning observational astronomy,
+                    astronomical instrumentation, spectroscopy, and computational
+                    astrophysics.
+
+                    My work combines scientific programming, observational data analysis,
+                    and independent instrumentation projects focused on optical
+                    spectroscopy and astronomical imaging.
+
+                    I am particularly interested in building low-cost scientific
+                    instrumentation, numerical simulations, and exploring observational
+                    techniques across different wavelength regimes including radio
+                    astronomy and interferometric methods.
+
+                    Beyond formal academic work, I actively pursue independent scientific
+                    explorations involving astrophysical simulations, data-driven modeling,
+                    and experimental visualization systems.
+
+                </div>
+
+
+
+                <!-- =======================================
+                     SOCIALS
+                ======================================= -->
+
+                <div class="socials">
+
+                    <a
+                        class="social-link"
+                        href="https://linkedin.com/in/sujoy7471"
+                        target="_blank"
+                    >
+                        LinkedIn
+                    </a>
+
+                    <a
+                        class="social-link"
+                        href="https://github.com/Sujoy7471"
+                        target="_blank"
+                    >
+                        GitHub
+                    </a>
+
+                    <a
+                        class="social-link"
+                        href="https://www.instagram.com/sujoy_7471"
+                        target="_blank"
+                    >
+                        Instagram
+                    </a>
+
+                    <a
+                        class="social-link"
+                        href="https://www.facebook.com/Sujoy7471"
+                        target="_blank"
+                    >
+                        Facebook
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =======================================
+             INFO GRID
+        ======================================= -->
+
+        <div class="info-grid">
+
+
+            <div class="info-card">
+
+                <div class="info-title">
+                    Education
+                </div>
+
+                <div class="info-content">
+
+                    Integrated PhD (M.Sc + PhD) in Astronomy & Astrophysics<br>
+                    Tata Institute of Fundamental Research, Mumbai<br><br>
+
+                    B.Sc (Hons.) in Physics — CGPA: 9.49
+
+                </div>
+
+            </div>
+
+
+
+            <div class="info-card">
+
+                <div class="info-title">
+                    Research Interests
+                </div>
+
+                <div class="info-content">
+
+                    Observational Astronomy<br>
+                    Spectroscopy<br>
+                    Astronomical Instrumentation<br>
+                    Scientific Computing<br>
+                    Data Analysis<br>
+                    Astrophysical Simulations
+
+                </div>
+
+            </div>
+
+
+
+            <div class="info-card">
+
+                <div class="info-title">
+                    Technical Skills
+                </div>
+
+                <div class="info-content">
+
+                    Python • C • GNU Octave<br>
+                    NumPy • SciPy • Matplotlib<br>
+                    Astropy • FITS Processing<br>
+                    Git • Linux • LaTeX
+
+                </div>
+
+            </div>
+
+
+
+            <div class="info-card">
+
+                <div class="info-title">
+                    Projects
+                </div>
+
+                <div class="info-content">
+
+                    Surface Brightness Fluctuation Pipeline<br>
+                    Exoplanet Transit Modeling<br>
+                    Stellar Spectrometer Construction<br>
+                    Numerical Astrophysics Simulations
+
+                </div>
+
+            </div>
+
+
+
+            <div class="info-card">
+
+                <div class="info-title">
+                    Achievements
+                </div>
+
+                <div class="info-content">
+
+                    TIFR GS 2024 — Top 0.25% nationally<br>
+                    AIR 52 — IIT JAM Physics<br>
+                    AIR 135 — JEST Physics
+                    Cracked CUET PG 2024
+
+                </div>
+
+            </div>
+
+
+
+            <div class="info-card">
+
+                <div class="info-title">
+                    Contact
+                </div>
+
+                <div class="info-content">
+
+                    Professional:<br>
+                    sujoy.karmakar@tifr.res.in<br><br>
+
+                    Personal:<br>
+                    sujoy999karmakar@gmail.com
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- =======================================
+     THREE JS
+======================================= -->
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
+  }
+}
+</script>
+
+
+
+<script type="module">
+
+import * as THREE from 'three';
+
+
+
+// =======================================
+// SCENE
+// =======================================
+
+const scene = new THREE.Scene();
+
+scene.fog = new THREE.FogExp2(
+    0x000000,
+    0.0009
+);
+
+
+
+// =======================================
+// CAMERA
+// =======================================
+
+const camera =
+    new THREE.PerspectiveCamera(
+        90,
+        window.innerWidth/window.innerHeight,
+        0.1,
+        1000
+    );
+
+camera.position.set(-5,10,100);
+
+camera.rotation.z =
+    THREE.MathUtils.degToRad(-30);
+
+camera.rotation.x =
+    THREE.MathUtils.degToRad(-25);
+
+camera.rotation.y =
+    THREE.MathUtils.degToRad(-5);
+
+
+
+// =======================================
+// RENDERER
+// =======================================
+
+const renderer =
+    new THREE.WebGLRenderer({
+
+        antialias:true,
+
+        alpha:true
+    });
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderer.setPixelRatio(1.2);
+
+document.body.appendChild(
+    renderer.domElement
+);
+
+renderer.autoClear = false;
+
+
+
+// =======================================
+// STARFIELD
+// =======================================
+
+const starGeometry =
+    new THREE.BufferGeometry();
+
+const starCount = 25000;
+
+const starPositions =
+    new Float32Array(starCount*3);
+
+for(let i=0;i<starCount;i++){
+
+    starPositions[i*3] =
+        (Math.random()-0.5)*700;
+
+    starPositions[i*3+1] =
+        (Math.random()-0.5)*700;
+
+    starPositions[i*3+2] =
+        (Math.random()-0.5)*700;
+}
+
+starGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(
+        starPositions,
+        3
+    )
+);
+
+const starMaterial =
+    new THREE.PointsMaterial({
+
+        color:0xdcc7ff,
+
+        size:0.65,
+
+        transparent:true,
+
+        opacity:0.8
+    });
+
+const stars =
+    new THREE.Points(
+        starGeometry,
+        starMaterial
+    );
+
+scene.add(stars);
+
+
+
+// =======================================
+// ANIMATION
+// =======================================
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+    stars.rotation.y += 0.00005;
+
+    stars.material.opacity =
+        0.65
+        + 0.15*Math.sin(
+            performance.now()*0.00025
+        );
+
+    renderer.render(
+        scene,
+        camera
+    );
+}
+
+animate();
+
+
+
+// =======================================
+// RESIZE
+// =======================================
+
+window.addEventListener(
+    'resize',
+    ()=>{
+
+        camera.aspect =
+            window.innerWidth
+            /window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+    }
+);
+
+</script>
+
+</body>
+</html>
