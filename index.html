@@ -5,6 +5,8 @@
 
 <meta charset="UTF-8">
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Sujoy Karmakar</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,39 +60,22 @@ canvas{
 
 .menu-box{
 
-    width:760px;
-
-    height:58px;
-
-    border-radius:35px;
-
-    background:
-        rgba(160,83,199,0.045);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.10);
-
-    backdrop-filter:blur(18px);
-
-    -webkit-backdrop-filter:
-        blur(18px);
-
-    box-shadow:
-        0 0 40px rgba(202, 92, 227, 0.327),
-        inset 0 0 25px rgba(190, 149, 228, 0.524);
-
     display:flex;
 
-    justify-content:space-evenly;
+    justify-content:center;
 
-    align-items:center;
+    align-items:stretch;
+
+    gap:32px;
+
+    flex-wrap:wrap;
+
+    padding:0 20px;
 
     transition:
-        opacity 0.8s ease,
-        transform 0.3s ease;
+        opacity 0.8s ease;
 
-    opacity:0.92;
+    opacity:1;
 
     pointer-events:auto;
 
@@ -100,22 +85,53 @@ canvas{
 
 .menu-item{
 
-    color:
-        rgba(208,194,210,0.75);
+    width:210px;
+
+    min-height:150px;
+
+    padding:26px 20px;
+
+    border-radius:30px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:14px;
+
+    text-align:center;
+
+    color:white;
 
     text-decoration:none;
 
-    font-size:20px;
+    font-size:18px;
 
     letter-spacing:1px;
 
-    padding:
-        10px 22px;
+    background:
+        rgba(160,83,199,0.045);
 
-    border-radius:16px;
+    border:
+        1px solid rgba(255,255,255,0.10);
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 0 40px rgba(202,92,227,0.25),
+        inset 0 0 25px rgba(190,149,228,0.35);
 
     transition:
-        all 0.35s ease;
+        transform 0.4s ease,
+        box-shadow 0.4s ease,
+        background 0.4s ease,
+        color 0.4s ease;
 }
 
 
@@ -124,18 +140,28 @@ canvas{
     color:white;
 
     background:
-        rgba(255,255,255,0.10);
+        rgba(255,255,255,0.08);
 
     box-shadow:
-        0 0 30px rgba(180,120,255,0.34),
-        0 0 60px rgba(181, 120, 255, 0.497);
+        0 0 50px rgba(180,120,255,0.45),
+        0 0 90px rgba(181,120,255,0.30),
+        inset 0 0 30px rgba(190,149,228,0.45);
 
     transform:
-        translateY(-3px)
-        scale(1.06);
+        translateY(-8px)
+        scale(1.03);
 
     text-shadow:
         0 0 12px rgba(255,255,255,0.7);
+}
+
+
+.menu-emoji{
+
+    font-size:38px;
+
+    filter:
+        drop-shadow(0 0 12px rgba(200,160,255,0.6));
 }
 
 
@@ -145,6 +171,8 @@ canvas{
 ======================================= */
 
 #fadeButton{
+
+    animation:fadeInFull 2s ease;
 
     position:fixed;
 
@@ -231,18 +259,37 @@ canvas{
 
     .menu-box{
 
-        width:85vw;
+        width:100%;
 
-        height:56px;
+        gap:12px;
 
-        border-radius:28px;
+        padding:0 12px;
+
+        flex-wrap:nowrap;
     }
 
     .menu-item{
 
-        font-size:15px;
+        width:auto;
 
-        padding:8px 12px;
+        flex:1;
+
+        min-height:110px;
+
+        padding:18px 8px;
+
+        border-radius:22px;
+
+        gap:10px;
+
+        font-size:12px;
+
+        letter-spacing:0.3px;
+    }
+
+    .menu-emoji{
+
+        font-size:28px;
     }
 
     #fadeButton{
@@ -274,8 +321,22 @@ canvas{
 
     to{
 
-        opacity:0.92;
+        opacity:1;
 
+        transform:translateY(0px);
+    }
+}
+
+
+@keyframes fadeInFull{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
         transform:translateY(0px);
     }
 }
@@ -296,15 +357,18 @@ canvas{
     <div class="menu-box" id="menuBox">
 
         <a class="menu-item" href="bio.html">
-            Bio
+            <span class="menu-emoji">🧑‍🚀</span>
+            <span>Bio</span>
         </a>
 
         <a class="menu-item" href="research.html">
-            Research Work
+            <span class="menu-emoji">🌌</span>
+            <span>Research Work</span>
         </a>
 
         <a class="menu-item" href="explorations.html">
-            Explorations
+            <span class="menu-emoji">🚀</span>
+            <span>Explorations</span>
         </a>
 
     </div>
@@ -1112,7 +1176,7 @@ let hiddenMode = false;
 function showUI(){
 
     menuBox.style.opacity =
-        '0.92';
+        '1';
 
     menuBox.style.pointerEvents =
         'auto';

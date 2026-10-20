@@ -1,0 +1,12 @@
+Single shot
+Specs of each image:
+exp 2s
+iso 6400
+f/1.8
+
+date: 6 april, 2026
+loc: TIFR Mumbai
+
+Device: Realme 12 Pro Plus, gso same scope as before
+
+Edited with Snapseed

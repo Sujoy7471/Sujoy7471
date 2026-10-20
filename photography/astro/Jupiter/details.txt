@@ -1,0 +1,27 @@
+All are single shot
+Specs of each image:
+Im1.jpg
+
+exp 0.5s
+iso 1600
+f/2.6
+
+date: 4 dec, 2025
+
+
+Im2.jpg
+
+exp 1/20s
+iso 400
+f/2.6
+
+date: 24 jan, 2026
+
+
+
+loc: TIFR Mumbai
+
+Device: Realme 12 Pro Plus and GSO 8 inch dobsonian telescope.
+
+Editing: Snapseed
+

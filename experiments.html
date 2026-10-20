@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fun Experiments | Sujoy Karmakar</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    overflow-x:hidden;
+    background:black;
+    color:white;
+    font-family:'Inter',sans-serif;
+}
+
+canvas{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    display:block;
+}
+
+/* =======================================
+   PAGE LAYOUT
+======================================= */
+
+#page{
+    position:relative;
+    z-index:10;
+    max-width:1200px;
+    margin:0 auto;
+    padding:120px 24px 100px;
+    animation:fadeIn 2s ease;
+}
+
+.page-title{
+    font-family:'Orbitron',sans-serif;
+    font-size:42px;
+    font-weight:700;
+    letter-spacing:3px;
+    line-height:1.3;
+    margin:0 0 12px;
+    text-align:center;
+    text-shadow:0 0 20px rgba(180,120,255,0.35);
+}
+
+.page-subtitle{
+    font-size:15px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:rgba(220,200,255,0.7);
+    margin:0 0 70px;
+    text-align:center;
+}
+
+/* =======================================
+   PROJECT CARDS
+======================================= */
+
+.gallery{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:30px;
+}
+
+.gallery > .project-card{
+    width:calc((100% - 60px) / 3);
+}
+
+@media(max-width:1000px){
+    .gallery > .project-card{
+        width:calc((100% - 30px) / 2);
+    }
+}
+
+.project-card{
+    display:flex;
+    flex-direction:column;
+    border-radius:30px;
+    overflow:hidden;
+    cursor:pointer;
+    background:rgba(160,83,199,0.045);
+    border:1px solid rgba(255,255,255,0.10);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:
+        0 0 40px rgba(202,92,227,0.22),
+        inset 0 0 25px rgba(190,149,228,0.30);
+    opacity:0;
+    transform:translateY(30px);
+    transition:
+        opacity 1.2s ease,
+        transform 0.5s ease,
+        box-shadow 0.4s ease;
+}
+
+.project-card.visible{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.project-card.visible:hover{
+    transform:translateY(-8px) scale(1.02);
+    box-shadow:
+        0 0 50px rgba(180,120,255,0.45),
+        0 0 90px rgba(181,120,255,0.30),
+        inset 0 0 30px rgba(190,149,228,0.45);
+}
+
+.project-cover{
+    aspect-ratio:4/3;
+    overflow:hidden;
+    background:#0b0710;
+}
+
+.project-cover img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform 0.6s ease;
+}
+
+.project-card:hover .project-cover img{
+    transform:scale(1.05);
+}
+
+.project-info{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    padding:22px 24px 26px;
+}
+
+.project-date{
+    font-size:12px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:rgba(210,180,255,0.8);
+    margin-bottom:10px;
+}
+
+.project-title{
+    font-family:'Orbitron',sans-serif;
+    font-size:17px;
+    letter-spacing:1px;
+    line-height:1.45;
+    margin-bottom:10px;
+}
+
+.project-tagline{
+    font-size:14px;
+    line-height:1.65;
+    color:rgba(255,255,255,0.72);
+    margin-bottom:16px;
+    flex:1;
+}
+
+.chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.chip{
+    font-size:12px;
+    padding:5px 11px;
+    border-radius:12px;
+    color:rgba(230,215,255,0.85);
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+/* =======================================
+   DETAIL VIEW
+======================================= */
+
+#lightbox{
+    position:fixed;
+    inset:0;
+    z-index:5000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+    background:rgba(0,0,0,0.82);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.4s ease;
+}
+
+#lightbox.open{
+    opacity:1;
+    pointer-events:auto;
+}
+
+.lb-inner{
+    display:flex;
+    gap:30px;
+    align-items:center;
+    max-width:1300px;
+    width:100%;
+    max-height:100%;
+}
+
+.lb-left{
+    flex-shrink:0;
+    width:min(60vw, 84vh * 4 / 3 - 60px);
+}
+
+.lb-media{
+    position:relative;
+    aspect-ratio:4/3;
+    border-radius:20px;
+    overflow:hidden;
+    background:#0b0710;
+    box-shadow:0 0 50px rgba(180,120,255,0.25);
+}
+
+.lb-media img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+}
+
+.lb-nav{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.15);
+    background:rgba(20,10,30,0.6);
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+    transition:all 0.3s ease;
+}
+
+.lb-nav:hover{
+    background:rgba(180,120,255,0.3);
+}
+
+.lb-prev{ left:12px; }
+.lb-next{ right:12px; }
+
+.lb-caption{
+    margin-top:12px;
+    font-size:14px;
+    color:rgba(220,200,255,0.75);
+    text-align:center;
+    min-height:20px;
+}
+
+.lb-thumbs{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.lb-thumb{
+    width:72px;
+    height:54px;
+    border-radius:10px;
+    overflow:hidden;
+    cursor:pointer;
+    border:2px solid transparent;
+    opacity:0.5;
+    background:#0b0710;
+    transition:all 0.3s ease;
+}
+
+.lb-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.lb-thumb:hover{ opacity:0.85; }
+
+.lb-thumb.active{
+    opacity:1;
+    border-color:rgba(210,170,255,0.9);
+    box-shadow:0 0 14px rgba(180,120,255,0.5);
+}
+
+.lb-details{
+    flex:1;
+    max-height:88vh;
+    overflow-y:auto;
+    padding:30px;
+    border-radius:26px;
+    background:rgba(160,83,199,0.06);
+    border:1px solid rgba(255,255,255,0.10);
+}
+
+.lb-date{
+    font-size:12px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:rgba(210,180,255,0.85);
+    margin-bottom:10px;
+}
+
+.lb-title{
+    font-family:'Orbitron',sans-serif;
+    font-size:22px;
+    line-height:1.4;
+    margin:0 0 16px;
+}
+
+.lb-summary{
+    font-size:15px;
+    line-height:1.8;
+    color:rgba(255,255,255,0.82);
+    margin:0 0 20px;
+}
+
+.lb-subhead{
+    font-family:'Orbitron',sans-serif;
+    font-size:13px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:rgba(210,180,255,0.9);
+    margin:0 0 12px;
+}
+
+.lb-list{
+    margin:0 0 22px;
+    padding-left:20px;
+}
+
+.lb-list li{
+    font-size:14px;
+    line-height:1.7;
+    color:rgba(255,255,255,0.82);
+    margin-bottom:8px;
+}
+
+.lb-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:22px;
+}
+
+.lb-link{
+    padding:11px 18px;
+    border-radius:14px;
+    text-decoration:none;
+    color:white;
+    font-size:14px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12);
+    transition:all 0.3s ease;
+}
+
+.lb-link:hover{
+    background:rgba(180,120,255,0.2);
+    border-color:rgba(210,170,255,0.5);
+    box-shadow:0 0 18px rgba(180,120,255,0.35);
+    transform:translateY(-2px);
+}
+
+.lb-close{
+    position:fixed;
+    top:24px;
+    right:24px;
+    width:52px;
+    height:52px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.06);
+    color:white;
+    font-size:22px;
+    cursor:pointer;
+    z-index:10;
+    transition:all 0.3s ease;
+}
+
+.lb-close:hover{
+    background:rgba(255,255,255,0.14);
+    transform:scale(1.06);
+}
+
+/* =======================================
+   BACK BUTTON
+======================================= */
+
+.back-button{
+    position:fixed;
+    top:26px;
+    left:26px;
+    padding:14px 22px;
+    border-radius:18px;
+    text-decoration:none;
+    color:white;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    z-index:3000;
+    animation:fadeIn 2s ease;
+    transition:all 0.35s ease;
+}
+
+.back-button:hover{
+    background:rgba(255,255,255,0.10);
+    transform:translateY(-2px);
+}
+
+/* =======================================
+   MOBILE
+======================================= */
+
+@media(max-width:768px){
+
+    #page{ padding:100px 16px 70px; }
+
+    .page-title{ font-size:28px; }
+
+    .page-subtitle{
+        font-size:12px;
+        margin-bottom:46px;
+    }
+
+    .gallery{ gap:24px; }
+
+    .gallery > .project-card{ width:100%; }
+
+    #lightbox{
+        align-items:flex-start;
+        padding:76px 14px 20px;
+    }
+
+    .lb-inner{
+        flex-direction:column;
+        overflow-y:auto;
+        max-height:100%;
+        gap:18px;
+    }
+
+    .lb-left{ width:100%; }
+
+    .lb-details{
+        max-height:none;
+        overflow:visible;
+        width:100%;
+        padding:22px;
+    }
+
+    .lb-title{ font-size:19px; }
+
+    .back-button{
+        top:18px;
+        left:18px;
+        padding:12px 18px;
+    }
+
+    .lb-close{
+        top:14px;
+        right:14px;
+    }
+}
+
+/* =======================================
+   ANIMATION
+======================================= */
+
+@keyframes fadeIn{
+    from{ opacity:0; transform:translateY(20px); }
+    to{ opacity:1; transform:translateY(0px); }
+}
+
+</style>
+</head>
+
+<body>
+
+
+<a href="explorations.html" class="back-button">
+    ← Explorations
+</a>
+
+
+<main id="page">
+
+    <h1 class="page-title">
+        Fun Experiments
+    </h1>
+
+    <p class="page-subtitle">
+        Things I built, simulated and measured
+    </p>
+
+    <div class="gallery" id="projects"></div>
+
+</main>
+
+
+<!-- =======================================
+     DETAIL VIEW
+======================================= -->
+
+<div id="lightbox">
+
+    <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+
+    <div class="lb-inner">
+
+        <div class="lb-left">
+
+            <div class="lb-media">
+
+                <img id="lbImg" src="" alt="">
+
+                <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous image">‹</button>
+
+                <button class="lb-nav lb-next" id="lbNext" aria-label="Next image">›</button>
+
+            </div>
+
+            <div class="lb-caption" id="lbCaption"></div>
+
+            <div class="lb-thumbs" id="lbThumbs"></div>
+
+        </div>
+
+        <div class="lb-details">
+
+            <div class="lb-date" id="lbDate"></div>
+
+            <h3 class="lb-title" id="lbTitle"></h3>
+
+            <p class="lb-summary" id="lbSummary"></p>
+
+            <h4 class="lb-subhead">Key results</h4>
+
+            <ul class="lb-list" id="lbList"></ul>
+
+            <div class="chips" id="lbTags"></div>
+
+            <div class="lb-links" id="lbLinks"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+// =======================================
+// PROJECT DATA
+// To add a project, copy one entry and edit it.
+// Images live in experiments/<project>/
+// =======================================
+
+const GH = "https://github.com/Sujoy7471/GitFiles";
+
+const projects = [
+
+    {
+        title: "Homemade Stellar Spectrograph",
+        date: "June 2026",
+        tagline: "Designed and built a spectrograph for an 8-inch telescope, recording star spectra with a smartphone.",
+        cover: "experiments/spectrograph/cover_collage.jpg",
+        tags: ["Instrumentation", "Spectroscopy", "Python"],
+        summary: "My term-paper project for Astronomy & Astrophysics II at TIFR. I designed and built a small stellar spectrograph: a dispersing unit with a ~350 lines/mm grating, followed by a Ramsden eyepiece, mounted on an 8-inch Newtonian telescope (f = 1200 mm), with a smartphone camera as the detector. I observed bright stars from Ghatghar, Maharashtra, calibrated the spectra with an instrumental response curve and analysed them in Python.",
+        highlights: [
+            "Estimated optical throughput: about 0.76% of the light collected by the telescope reaches the camera in the main first order (about 1 in 130 photons).",
+            "Spectral resolution of about 25 nm, so the instrument works best as a three-band photometer.",
+            "Colour temperatures: Antares 3677 ± 101 K (literature ~3500 K), Arcturus 4027 ± 130 K (~4286 K), Vega 11681 ± 323 K (~9800 K), Sirius 15650 ± 3735 K (~9940 K).",
+            "A modified dispersing unit, together with Earth's rotation to gather more data, improved the resolution to ~10 nm on Vega and may show some line features."
+        ],
+        links: [
+            { label: "📑 Presentation (PDF)", url: "experiments/spectrograph/spectrograph_presentation.pdf" }
+        ],
+        images: [
+            { src: "experiments/spectrograph/spectra_view.jpg", caption: "Spectra seen through the spectrograph" },
+            { src: "experiments/spectrograph/instrument.jpg", caption: "The spectrograph, small enough to hold in one hand" },
+            { src: "experiments/spectrograph/hardware.jpg", caption: "The telescope I used and the spectrograph" },
+            { src: "experiments/spectrograph/optical_design.jpg", caption: "Optical layout of the instrument" },
+            { src: "experiments/spectrograph/data_analysis.jpg", caption: "From raw image to calibrated spectrum" },
+            { src: "experiments/spectrograph/antares_blackbody_fit.png", caption: "Blackbody fit to the three-band photometry of Antares (T = 3677 K)" },
+            { src: "experiments/spectrograph/vega_photometry.jpg", caption: "Three-band photometry and temperature fit for Vega" },
+            { src: "experiments/spectrograph/vega_high_res.jpg", caption: "Higher-resolution Vega spectrum with the modified dispersing unit" }
+        ]
+    },
+
+    {
+        title: "Surface Brightness Fluctuation Distances",
+        date: "December 2025",
+        tagline: "Measuring distances to elliptical galaxies from Hubble images with the SBF method.",
+        cover: "experiments/sbf/cover_collage.jpg",
+        tags: ["Galaxies", "HST data", "Python"],
+        summary: "A semester-break project inspired by my cosmology term paper. Using HST ACS/WFC images, I built a pipeline that models each elliptical galaxy with a Sérsic profile, masks globular clusters and background sources, and fits the power spectrum of the residual image (with a PSF built from stars in the same frame) to get the SBF magnitude. Calibrating the SBF magnitude against galaxy colour (F475W − F814W) then gives distances.",
+        highlights: [
+            "Calibrated the colour–SBF magnitude relation using galaxies with known distances.",
+            "M85: 17.67 ± 0.87 Mpc, against a literature value of 18.5 ± 1.3 Mpc (within 5%).",
+            "NGC 3268: 46.78 ± 3.33 Mpc, against 40 ± 4 Mpc, using F435W data converted to F475W colour."
+        ],
+        links: [
+            { label: "💻 GitHub", url: GH + "/tree/main/SBF" },
+            { label: "📑 Write-up (PDF)", url: GH + "/blob/main/SBF/SBF.pdf" }
+        ],
+        images: [
+            { src: "experiments/sbf/cover_m85.jpg", caption: "M85, the HST image used for the analysis" },
+            { src: "experiments/sbf/M85-sbf.png", caption: "M85: data, Sérsic + background model, and residual" },
+            { src: "experiments/sbf/M85-res.png", caption: "Final SBF residual image of M85" },
+            { src: "experiments/sbf/C-sbf.png", caption: "Colour–SBF magnitude calibration" }
+        ]
+    },
+
+    {
+        title: "Exoplanet Transit Modelling",
+        date: "January 2026",
+        tagline: "A Monte Carlo transit model of HD 209458 b, built from scratch and fitted to real data.",
+        cover: "experiments/exoplanet/model_vs_data.png",
+        tags: ["Exoplanets", "Monte Carlo", "Python"],
+        summary: "A curiosity-driven project to understand how a transit light curve comes directly from orbital geometry and stellar physics, without pre-built transit models. Using real photometry of the hot Jupiter HD 209458 b, I timed the transits to get the orbital period, modelled the stellar disk with randomly sampled points and quadratic limb darkening, and computed the light blocked by the planet at each step. A grid search over inclination and radius ratio gave the best fit.",
+        highlights: [
+            "Orbital period: 3.52519901 ± 0.00039853 days.",
+            "Orbital radius: (6.78 ± 0.10) × 10⁹ m, about 8.12 stellar radii.",
+            "Inclination: 85.8°, assuming a circular orbit.",
+            "Planet-to-star radius ratio 0.130, giving a planet radius of about 1.52 Jupiter radii."
+        ],
+        links: [
+            { label: "💻 GitHub", url: GH + "/tree/main/Exoplanet_transit" }
+        ],
+        images: [
+            { src: "experiments/exoplanet/model_vs_data.png", caption: "Simulated transit (red) over the binned data" },
+            { src: "experiments/exoplanet/raw_light_curve.png", caption: "Photometry of HD 209458 showing two transits" },
+            { src: "experiments/exoplanet/periodogram.png", caption: "Lomb–Scargle periodogram of the light curve" },
+            { src: "experiments/exoplanet/transit_polyfit.png", caption: "Polynomial fit used to time a transit" },
+            { src: "experiments/exoplanet/model_full.png", caption: "Simulated light curve across the full data set" }
+        ]
+    },
+
+    {
+        title: "The Electrostatic Bowl",
+        date: "April 2025",
+        tagline: "Fields and particle trajectories around a uniformly charged hemispherical shell.",
+        cover: "experiments/electrostatic_bowl/cover_collage.jpg",
+        tags: ["Electrodynamics", "Simulation", "Python"],
+        summary: "My Electrodynamics I term paper. A charged hemispherical shell is simple to describe but hard to solve in general, so I combined analytical results along the symmetry axis with numerical integration in Python to map the potential and field lines, including how a nearby point charge distorts them. I then traced the trajectories of a charged particle moving under both the shell's electric field and gravity, using an RK4 integrator.",
+        highlights: [
+            "Numerical potential and field checked against the analytical solution along the axis.",
+            "Field maps with positive and negative point charges at different positions.",
+            "Trajectories under gravity and the shell's field: a vertical oscillator, a 'charged splash', a double bounce, and a beam of particles including relativistic effects.",
+            "Possible use: an electrostatic counter for slow particles in a beam."
+        ],
+        links: [
+            { label: "💻 GitHub", url: GH + "/tree/main/Electrostatic%20Bowl" },
+            { label: "📑 Term paper (PDF)", url: GH + "/blob/main/Electrostatic%20Bowl/ED_TermPaper_SujoyKarmakar.pdf" }
+        ],
+        images: [
+            { src: "experiments/electrostatic_bowl/field_negative_charge.png", caption: "Potential and field lines with a −0.015 C point charge at (1, 0, 1)" },
+            { src: "experiments/electrostatic_bowl/field_positive_charge.png", caption: "With a +0.015 C point charge at (0, 0, 1)" },
+            { src: "experiments/electrostatic_bowl/field_top_view.png", caption: "Top view of the shell's potential" },
+            { src: "experiments/electrostatic_bowl/double_bounce.png", caption: "A double bounce, under gravity and the shell's field" },
+            { src: "experiments/electrostatic_bowl/charged_splash.png", caption: "The charged splash, under gravity and the shell's field" },
+            { src: "experiments/electrostatic_bowl/relativistic_beam.png", caption: "A beam of particles under gravity, with relativistic effects" }
+        ]
+    },
+
+    {
+        title: "Fano Resonance with Sound",
+        date: "April 2026",
+        tagline: "Observing an asymmetric Fano profile with a phone speaker, a small tube and a microphone.",
+        cover: "experiments/fano_resonance/cover_collage.jpg",
+        tags: ["Acoustics", "Wave physics", "Python"],
+        summary: "Part of my Atomic & Molecular Physics term paper on Fano resonance. To show that the effect is not limited to atoms, I designed a simple acoustic experiment: a phone plays a sound whose frequency increases monotonically, next to a closed tube about 8.5 cm long, and a microphone connected to a laptop records the sound. A Fourier transform over short time bins picks out the amplitude at the frequency being played at each moment, separating it from background noise. I recorded the sweep with and without the tube, then divided the two profiles to remove the effects of the room, the speaker and the microphone.",
+        highlights: [
+            "A clear asymmetric Fano profile near the tube's fundamental resonance, around 1000 Hz, with a fitted asymmetry parameter q ≈ 0.62.",
+            "A second, noisier Fano profile near the first overtone, around 2800 Hz.",
+            "Why it happens: the tube acts as a narrow resonant channel, while sound reaching the microphone directly through the room acts as a broad continuum. The two interfere.",
+            "Live frequency tracking and data analysis written in Python."
+        ],
+        links: [],
+        images: [
+            { src: "experiments/fano_resonance/setup.jpg", caption: "Experimental setup" },
+            { src: "experiments/fano_resonance/fano_fundamental.png", caption: "Fano profile near the fundamental resonance of the tube" },
+            { src: "experiments/fano_resonance/fano_overtone.png", caption: "Fano profile near the first overtone of the tube" },
+            { src: "experiments/fano_resonance/calibration.png?v=2", caption: "System response (with the tube), background response (without it) and the calibrated ratio, 600–2000 Hz" }
+        ]
+    }
+
+];
+
+
+// =======================================
+// BUILD CARDS
+// =======================================
+
+const gallery = document.getElementById('projects');
+
+projects.forEach(p => {
+
+    const card = document.createElement('div');
+
+    card.className = 'project-card';
+
+    card.innerHTML = `
+        <div class="project-cover">
+            <img src="${p.cover}" alt="${p.title}" loading="lazy"
+                 style="object-position:${p.coverPos || '50% 50%'}">
+        </div>
+        <div class="project-info">
+            <div class="project-date">${p.date}</div>
+            <div class="project-title">${p.title}</div>
+            <div class="project-tagline">${p.tagline}</div>
+            <div class="chips">
+                ${p.tags.map(t => `<span class="chip">${t}</span>`).join('')}
+            </div>
+        </div>`;
+
+    card.addEventListener('click', () => openProject(p));
+
+    gallery.appendChild(card);
+});
+
+
+// =======================================
+// REVEAL ON SCROLL
+// =======================================
+
+const observer = new IntersectionObserver(entries => {
+
+    entries.forEach(e => {
+
+        if(e.isIntersecting){
+
+            e.target.classList.add('visible');
+
+            observer.unobserve(e.target);
+        }
+    });
+
+}, { threshold:0.15 });
+
+document.querySelectorAll('.project-card').forEach(c => observer.observe(c));
+
+
+// =======================================
+// DETAIL VIEW
+// =======================================
+
+const lightbox = document.getElementById('lightbox');
+
+let current = null;
+
+let imgIndex = 0;
+
+
+function showImage(i){
+
+    const n = current.images.length;
+
+    imgIndex = (i + n) % n;
+
+    const im = current.images[imgIndex];
+
+    document.getElementById('lbImg').src = im.src;
+
+    document.getElementById('lbImg').alt = im.caption || current.title;
+
+    document.getElementById('lbCaption').textContent = im.caption || '';
+
+    document.querySelectorAll('.lb-thumb').forEach((t, j) =>
+        t.classList.toggle('active', j === imgIndex));
+}
+
+
+function openProject(p){
+
+    current = p;
+
+    document.getElementById('lbDate').textContent = p.date;
+
+    document.getElementById('lbTitle').textContent = p.title;
+
+    document.getElementById('lbSummary').textContent = p.summary;
+
+    document.getElementById('lbList').innerHTML =
+        p.highlights.map(h => `<li>${h}</li>`).join('');
+
+    document.getElementById('lbTags').innerHTML =
+        p.tags.map(t => `<span class="chip">${t}</span>`).join('');
+
+    document.getElementById('lbLinks').style.display = p.links.length ? '' : 'none';
+
+    document.getElementById('lbLinks').innerHTML =
+        p.links.map(l =>
+            `<a class="lb-link" href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`
+        ).join('');
+
+    document.getElementById('lbThumbs').innerHTML =
+        p.images.map((im, j) =>
+            `<div class="lb-thumb" data-i="${j}"><img src="${im.src}" alt=""></div>`
+        ).join('');
+
+    document.querySelectorAll('.lb-thumb').forEach(t =>
+        t.addEventListener('click', () => showImage(+t.dataset.i)));
+
+    const multi = p.images.length > 1;
+
+    document.querySelectorAll('.lb-nav').forEach(b =>
+        b.style.display = multi ? '' : 'none');
+
+    showImage(0);
+
+    document.querySelector('.lb-inner').scrollTop = 0;
+
+    document.querySelector('.lb-details').scrollTop = 0;
+
+    lightbox.classList.add('open');
+
+    document.body.style.overflow = 'hidden';
+}
+
+
+function closeProject(){
+
+    lightbox.classList.remove('open');
+
+    document.body.style.overflow = '';
+}
+
+
+document.getElementById('lbPrev').addEventListener('click', () => showImage(imgIndex - 1));
+
+document.getElementById('lbNext').addEventListener('click', () => showImage(imgIndex + 1));
+
+document.getElementById('lbClose').addEventListener('click', closeProject);
+
+lightbox.addEventListener('click', e => {
+
+    if(e.target === lightbox) closeProject();
+});
+
+document.addEventListener('keydown', e => {
+
+    if(!lightbox.classList.contains('open')) return;
+
+    if(e.key === 'Escape') closeProject();
+
+    if(e.key === 'ArrowRight') showImage(imgIndex + 1);
+
+    if(e.key === 'ArrowLeft') showImage(imgIndex - 1);
+});
+
+</script>
+
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
+  }
+}
+</script>
+
+
+
+<script type="module">
+
+import * as THREE from 'three';
+
+import { EffectComposer }
+from 'three/addons/postprocessing/EffectComposer.js';
+
+import { RenderPass }
+from 'three/addons/postprocessing/RenderPass.js';
+
+import { UnrealBloomPass }
+from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+
+
+// =======================================
+// SCENE
+// =======================================
+
+const scene = new THREE.Scene();
+
+scene.fog = new THREE.FogExp2(
+    0x000000,
+    0.0009
+);
+
+
+
+// =======================================
+// CAMERA
+// =======================================
+
+const camera =
+    new THREE.PerspectiveCamera(
+        90,
+        window.innerWidth/window.innerHeight,
+        0.1,
+        1000
+    );
+
+camera.position.set(-5,10,100);
+
+camera.rotation.z =
+    THREE.MathUtils.degToRad(-30);
+
+camera.rotation.x =
+    THREE.MathUtils.degToRad(-25);
+
+camera.rotation.y =
+    THREE.MathUtils.degToRad(-5);
+
+
+
+// =======================================
+// RENDERER
+// =======================================
+
+const renderer =
+    new THREE.WebGLRenderer({
+
+        antialias:true,
+
+        alpha:true
+    });
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderer.setPixelRatio(1.2);
+
+document.body.appendChild(
+    renderer.domElement
+);
+
+renderer.autoClear = false;
+
+
+
+// =======================================
+// STARFIELD
+// =======================================
+
+const starGeometry =
+    new THREE.BufferGeometry();
+
+const starCount = 25000;
+
+const starPositions =
+    new Float32Array(starCount*3);
+
+for(let i=0;i<starCount;i++){
+
+    starPositions[i*3] =
+        (Math.random()-0.5)*700;
+
+    starPositions[i*3+1] =
+        (Math.random()-0.5)*700;
+
+    starPositions[i*3+2] =
+        (Math.random()-0.5)*700;
+}
+
+starGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(
+        starPositions,
+        3
+    )
+);
+
+const starMaterial =
+    new THREE.PointsMaterial({
+
+        color:0xdcc7ff,
+
+        size:0.65,
+
+        transparent:true,
+
+        opacity:0.8
+    });
+
+const stars =
+    new THREE.Points(
+        starGeometry,
+        starMaterial
+    );
+
+scene.add(stars);
+
+
+
+// =======================================
+// DISK
+// =======================================
+
+const discParticleCount = 35000;
+
+const positions =
+    new Float32Array(
+        discParticleCount*3
+    );
+
+const colors =
+    new Float32Array(
+        discParticleCount*3
+    );
+
+const color =
+    new THREE.Color();
+
+const initialAngles = [];
+const radii = [];
+const angularSpeeds = [];
+
+for(let i=0;i<discParticleCount;i++){
+
+    const radius =
+        THREE.MathUtils.randFloat(10,40);
+
+    const angle =
+        THREE.MathUtils.randFloat(
+            0,
+            2*Math.PI
+        );
+
+    const height =
+        THREE.MathUtils.randFloatSpread(
+            4-radius/40
+        );
+
+    positions[i*3] =
+        radius*Math.cos(angle);
+
+    positions[i*3+1] =
+        height;
+
+    positions[i*3+2] =
+        radius*Math.sin(angle);
+
+    initialAngles.push(angle);
+
+    radii.push(radius);
+
+    angularSpeeds.push(
+        35/Math.sqrt(
+            radius*radius*radius-9.5
+        )
+    );
+
+    const t = radius/40;
+
+    color.setHSL(
+        1.2
+        +0.1*Math.random()
+        -0.4*t,
+
+        0.8,
+
+        0.6-t*0.7
+    );
+
+    colors.set(
+        [color.r,color.g,color.b],
+        i*3
+    );
+}
+
+
+const discGeometry =
+    new THREE.BufferGeometry();
+
+discGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(
+        positions,
+        3
+    )
+);
+
+discGeometry.setAttribute(
+    'color',
+    new THREE.BufferAttribute(
+        colors,
+        3
+    )
+);
+
+const discMaterial =
+    new THREE.PointsMaterial({
+
+        size:0.18,
+
+        vertexColors:true,
+
+        transparent:true,
+
+        opacity:0.22,
+
+        depthWrite:false,
+
+        blending:
+            THREE.AdditiveBlending
+    });
+
+const disc =
+    new THREE.Points(
+        discGeometry,
+        discMaterial
+    );
+
+disc.rotation.x =
+    THREE.MathUtils.degToRad(10);
+
+scene.add(disc);
+
+
+
+// =======================================
+// CENTRAL STAR
+// =======================================
+
+const star =
+    new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+            2.2,
+            64,
+            64
+        ),
+
+        new THREE.MeshBasicMaterial({
+            color:0xfafcff
+        })
+    );
+
+scene.add(star);
+
+
+
+// =======================================
+// GLOW
+// =======================================
+
+const glow =
+    new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+            4.5,
+            64,
+            64
+        ),
+
+        new THREE.MeshBasicMaterial({
+
+            color:0xffaa33,
+
+            transparent:true,
+
+            opacity:0.015,
+
+            blending:
+                THREE.AdditiveBlending,
+
+            depthWrite:false
+        })
+    );
+
+scene.add(glow);
+
+
+
+// =======================================
+// JET AXIS
+// =======================================
+
+const diskTilt =
+    THREE.MathUtils.degToRad(10);
+
+const jetAxis =
+    new THREE.Vector3(
+        0,
+        Math.cos(diskTilt),
+        Math.sin(diskTilt)
+    ).normalize();
+
+
+
+// =======================================
+// BASIS VECTORS
+// =======================================
+
+const perp1 =
+    new THREE.Vector3(1,0,0)
+    .cross(jetAxis)
+    .normalize();
+
+const perp2 =
+    jetAxis.clone()
+    .cross(perp1)
+    .normalize();
+
+
+
+// =======================================
+// COLLIMATED JETS
+// =======================================
+
+const jetParticleCount = 8000;
+
+const jetPositions =
+    new Float32Array(
+        jetParticleCount * 3
+    );
+
+const jetColors =
+    new Float32Array(
+        jetParticleCount * 3
+    );
+
+const jetVelocities = [];
+const jetDirections = [];
+const jetOffsets = [];
+
+const jetColor =
+    new THREE.Color();
+
+for(let i=0;i<jetParticleCount;i++){
+
+    const dir =
+        Math.random()<0.5
+        ? 1
+        : -1;
+
+    const spread = 1;
+
+    const r =
+        Math.random()*spread;
+
+    const theta =
+        Math.random()*2*Math.PI;
+
+    const offset =
+        perp1.clone()
+        .multiplyScalar(
+            r*Math.cos(theta)
+        )
+
+        .add(
+            perp2.clone()
+            .multiplyScalar(
+                r*Math.sin(theta)
+            )
+        );
+
+    const launch =
+        dir*Math.random()*140;
+
+    const base =
+        jetAxis.clone()
+        .multiplyScalar(launch);
+
+    const pos =
+        base.add(offset);
+
+    jetPositions[i*3] = pos.x;
+    jetPositions[i*3+1] = pos.y;
+    jetPositions[i*3+2] = pos.z;
+
+    jetVelocities.push(
+        dir * (
+            0.45
+            + Math.random()*0.55
+        )
+    );
+
+    jetDirections.push(dir);
+
+    jetOffsets.push(offset);
+
+    jetColor.setHSL(
+        0.78,
+        1.0,
+        0.6
+    );
+
+    const brightness =
+        dir === 1
+        ? 1.0
+        : 0.18;
+
+    jetColors[i*3] =
+        jetColor.r * brightness;
+
+    jetColors[i*3+1] =
+        jetColor.g * brightness;
+
+    jetColors[i*3+2] =
+        jetColor.b * brightness;
+}
+
+
+const jetGeometry =
+    new THREE.BufferGeometry();
+
+jetGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(
+        jetPositions,
+        3
+    )
+);
+
+jetGeometry.setAttribute(
+    'color',
+    new THREE.BufferAttribute(
+        jetColors,
+        3
+    )
+);
+
+const jetMaterial =
+    new THREE.PointsMaterial({
+
+        size:0.25,
+
+        vertexColors:true,
+
+        transparent:true,
+
+        opacity:0.35,
+
+        depthWrite:false,
+
+        blending:
+            THREE.AdditiveBlending
+    });
+
+const jets =
+    new THREE.Points(
+        jetGeometry,
+        jetMaterial
+    );
+
+scene.add(jets);
+
+
+
+// =======================================
+// MOVE WHOLE SYSTEM
+// =======================================
+
+const systemOffset =
+    new THREE.Vector3(
+        10,
+        -12,
+        5
+    );
+
+disc.position.copy(systemOffset);
+
+star.position.copy(systemOffset);
+
+glow.position.copy(systemOffset);
+
+jets.position.copy(systemOffset);
+
+
+
+// =======================================
+// BLOOM
+// =======================================
+
+const composer =
+    new EffectComposer(renderer);
+
+composer.addPass(
+    new RenderPass(scene,camera)
+);
+
+composer.addPass(
+    new UnrealBloomPass(
+
+        new THREE.Vector2(
+            window.innerWidth,
+            window.innerHeight
+        ),
+
+        0.9,
+        0.35,
+        0.12
+    )
+);
+
+
+
+// =======================================
+// ANIMATION
+// =======================================
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+    const elapsedTime =
+        performance.now()*0.0001;
+
+
+
+    // =======================================
+    // CAMERA DRIFT
+    // =======================================
+
+    camera.position.x =
+        -5
+        + Math.sin(performance.now()*0.00008)*1.5;
+
+    camera.position.y =
+        10
+        + Math.cos(performance.now()*0.00006)*1.2;
+
+
+
+    // =======================================
+    // STARFIELD
+    // =======================================
+
+    stars.rotation.y += 0.00008;
+
+    stars.material.opacity =
+        0.65
+        + 0.15*Math.sin(
+            performance.now()*0.00025
+        );
+
+
+
+    // =======================================
+    // DISK ROTATION
+    // =======================================
+
+    const pos =
+        discGeometry.attributes.position.array;
+
+    for(let i=0;i<discParticleCount;i++){
+
+        let angle =
+            initialAngles[i]
+            - angularSpeeds[i]
+            * elapsedTime;
+
+        let r = radii[i];
+
+        pos[i*3] =
+            r*Math.cos(angle);
+
+        pos[i*3+2] =
+            r*Math.sin(angle);
+    }
+
+    discGeometry
+        .attributes
+        .position
+        .needsUpdate = true;
+
+
+
+    // =======================================
+    // STAR PULSE
+    // =======================================
+
+    star.material.opacity =
+        0.68
+        + 0.16*Math.sin(
+            performance.now()*0.0007
+        );
+
+
+
+    // =======================================
+    // JET ANIMATION
+    // =======================================
+
+    const jetPos =
+        jetGeometry.attributes.position.array;
+
+    for(let i=0;i<jetParticleCount;i++){
+
+        const dir =
+            jetDirections[i];
+
+        const speed =
+            jetVelocities[i];
+
+        jetPos[i*3] +=
+            jetAxis.x * speed;
+
+        jetPos[i*3+1] +=
+            jetAxis.y * speed;
+
+        jetPos[i*3+2] +=
+            jetAxis.z * speed;
+
+        const dist =
+            Math.sqrt(
+                jetPos[i*3]**2 +
+                jetPos[i*3+1]**2 +
+                jetPos[i*3+2]**2
+            );
+
+        const widen =
+            0.08 * dist;
+
+        jetPos[i*3] +=
+            (Math.random()-0.5)
+            * widen;
+
+        jetPos[i*3+1] +=
+            (Math.random()-0.5)
+            * widen;
+
+        jetPos[i*3+2] +=
+            (Math.random()-0.5)
+            * widen;
+
+        if(dist > 140){
+
+            const launch =
+                dir*Math.random()*2;
+
+            const base =
+                jetAxis.clone()
+                .multiplyScalar(launch);
+
+            const offset =
+                jetOffsets[i];
+
+            const p =
+                base.add(offset);
+
+            jetPos[i*3] = p.x;
+            jetPos[i*3+1] = p.y;
+            jetPos[i*3+2] = p.z;
+        }
+    }
+
+    jetGeometry
+        .attributes
+        .position
+        .needsUpdate = true;
+
+
+
+    // =======================================
+    // BLOOM PULSE
+    // =======================================
+
+    composer.passes[1].strength =
+        0.9
+        + 0.08*Math.sin(
+            performance.now()*0.001
+        );
+
+
+
+    renderer.clear();
+
+    composer.render();
+}
+
+animate();
+
+
+
+// =======================================
+// RESIZE
+// =======================================
+
+window.addEventListener(
+    'resize',
+    ()=>{
+
+        camera.aspect =
+            window.innerWidth
+            /window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+    }
+);
+
+</script>
+
+</body>
+</html>

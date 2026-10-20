@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Explorations | Sujoy Karmakar</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+
+    overflow-x:hidden;
+
+    background:black;
+
+    color:white;
+
+    font-family:'Inter',sans-serif;
+}
+
+canvas{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:0;
+
+    display:block;
+}
+
+
+
+/* =======================================
+   PAGE LAYOUT
+======================================= */
+
+#ui-container{
+
+    position:relative;
+
+    z-index:1000;
+
+    min-height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:110px 24px 60px;
+
+    transition:opacity 0.8s ease;
+
+    animation:fadeIn 2s ease;
+}
+
+
+.page-title{
+
+    font-family:'Orbitron',sans-serif;
+
+    font-size:44px;
+
+    font-weight:700;
+
+    letter-spacing:3px;
+
+    margin:0 0 12px;
+
+    text-align:center;
+
+    text-shadow:
+        0 0 20px rgba(180,120,255,0.35);
+}
+
+
+.page-subtitle{
+
+    font-size:16px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
+
+    color:rgba(220,200,255,0.7);
+
+    margin:0 0 50px;
+
+    text-align:center;
+}
+
+
+
+/* =======================================
+   OPTION CARDS
+======================================= */
+
+.options{
+
+    display:flex;
+
+    gap:36px;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    width:100%;
+}
+
+
+.option-card{
+
+    width:360px;
+
+    max-width:100%;
+
+    min-height:280px;
+
+    padding:40px 34px;
+
+    border-radius:36px;
+
+    text-decoration:none;
+
+    color:white;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    background:
+        rgba(160,83,199,0.045);
+
+    border:
+        1px solid rgba(255,255,255,0.10);
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 0 40px rgba(202,92,227,0.25),
+        inset 0 0 25px rgba(190,149,228,0.35);
+
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease,
+        background 0.4s ease;
+}
+
+
+.option-card:hover{
+
+    transform:
+        translateY(-8px)
+        scale(1.03);
+
+    background:
+        rgba(255,255,255,0.08);
+
+    box-shadow:
+        0 0 50px rgba(180,120,255,0.45),
+        0 0 90px rgba(181,120,255,0.30),
+        inset 0 0 30px rgba(190,149,228,0.45);
+}
+
+
+.option-icon{
+
+    font-size:46px;
+
+    margin-bottom:22px;
+
+    filter:
+        drop-shadow(0 0 12px rgba(200,160,255,0.6));
+}
+
+
+.option-title{
+
+    font-family:'Orbitron',sans-serif;
+
+    font-size:22px;
+
+    font-weight:500;
+
+    letter-spacing:1px;
+
+    line-height:1.4;
+
+    margin-bottom:16px;
+}
+
+
+.option-text{
+
+    font-size:15px;
+
+    line-height:1.7;
+
+    color:rgba(255,255,255,0.75);
+}
+
+
+
+/* =======================================
+   BACK BUTTON
+======================================= */
+
+.back-button{
+
+    position:fixed;
+
+    top:26px;
+
+    left:26px;
+
+    padding:14px 22px;
+
+    border-radius:18px;
+
+    text-decoration:none;
+
+    color:white;
+
+    background:rgba(255,255,255,0.05);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(12px);
+
+    -webkit-backdrop-filter:blur(12px);
+
+    z-index:3000;
+
+    transition:all 0.35s ease;
+}
+
+
+.back-button:hover{
+
+    background:rgba(255,255,255,0.10);
+
+    transform:translateY(-2px);
+}
+
+
+
+/* =======================================
+   MOBILE
+======================================= */
+
+@media(max-width:768px){
+
+    .page-title{
+        font-size:30px;
+    }
+
+    .page-subtitle{
+
+        font-size:13px;
+
+        margin-bottom:34px;
+    }
+
+    .options{
+        gap:22px;
+    }
+
+    .option-card{
+
+        min-height:220px;
+
+        padding:30px 24px;
+
+        border-radius:28px;
+    }
+
+    .option-title{
+        font-size:18px;
+    }
+
+    .back-button{
+
+        top:18px;
+
+        left:18px;
+
+        padding:12px 18px;
+    }
+}
+
+
+
+/* =======================================
+   ANIMATION
+======================================= */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0px);
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+
+<!-- =======================================
+     BACK BUTTON
+======================================= -->
+
+<a href="index.html" class="back-button">
+    ← Home
+</a>
+
+
+
+<!-- =======================================
+     EXPLORATION OPTIONS
+======================================= -->
+
+<div id="ui-container">
+
+    <h1 class="page-title">
+        Explorations
+    </h1>
+
+    <p class="page-subtitle">
+        Beyond the lab
+    </p>
+
+    <div class="options">
+
+        <a class="option-card" href="photography.html">
+
+            <div class="option-icon">
+                🔭
+            </div>
+
+            <div class="option-title">
+                Astrophotography
+            </div>
+
+            <div class="option-text">
+                Nebulae, planets and the Milky Way, through my lens.
+            </div>
+
+        </a>
+
+        <a class="option-card" href="experiments.html">
+
+            <div class="option-icon">
+                🧪
+            </div>
+
+            <div class="option-title">
+                Fun Experiments
+            </div>
+
+            <div class="option-text">
+                Simulations, gadgets and curious side projects.
+            </div>
+
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
+  }
+}
+</script>
+
+
+
+<script type="module">
+
+import * as THREE from 'three';
+
+import { EffectComposer }
+from 'three/addons/postprocessing/EffectComposer.js';
+
+import { RenderPass }
+from 'three/addons/postprocessing/RenderPass.js';
+
+import { UnrealBloomPass }
+from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+
+
+// =======================================
+// SCENE
+// =======================================
+
+const scene = new THREE.Scene();
+
+scene.fog = new THREE.FogExp2(
+    0x000000,
+    0.0009
+);
+
+
+
+// =======================================
+// CAMERA
+// =======================================
+
+const camera =
+    new THREE.PerspectiveCamera(
+        90,
+        window.innerWidth/window.innerHeight,
+        0.1,
+        1000
+    );
+
+camera.position.set(-5,10,100);
+
+camera.rotation.z =
+    THREE.MathUtils.degToRad(-30);
+
+camera.rotation.x =
+    THREE.MathUtils.degToRad(-25);
+
+camera.rotation.y =
+    THREE.MathUtils.degToRad(-5);
+
+
+
+// =======================================
+// RENDERER
+// =======================================
+
+const renderer =
+    new THREE.WebGLRenderer({
+
+        antialias:true,
+
+        alpha:true
+    });
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderer.setPixelRatio(1.2);
+
+document.body.appendChild(
+    renderer.domElement
+);
+
+renderer.autoClear = false;
+
+
+
+// =======================================
+// STARFIELD
+// =======================================
+
+const starGeometry =
+    new THREE.BufferGeometry();
+
+const starCount = 25000;
+
+const starPositions =
+    new Float32Array(starCount*3);
+
+for(let i=0;i<starCount;i++){
+
+    starPositions[i*3] =
+        (Math.random()-0.5)*700;
+
+    starPositions[i*3+1] =
+        (Math.random()-0.5)*700;
+
+    starPositions[i*3+2] =
+        (Math.random()-0.5)*700;
+}
+
+starGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(
+        starPositions,
+        3
+    )
+);
+
+const starMaterial =
+    new THREE.PointsMaterial({
+
+        color:0xdcc7ff,
+
+        size:0.65,
+
+        transparent:true,
+
+        opacity:0.8
+    });
+
+const stars =
+    new THREE.Points(
+        starGeometry,
+        starMaterial
+    );
+
+scene.add(stars);
+
+
+
+// =======================================
+// DISK
+// =======================================
+
+const discParticleCount = 35000;
+
+const positions =
+    new Float32Array(
+        discParticleCount*3
+    );
+
+const colors =
+    new Float32Array(
+        discParticleCount*3
+    );
+
+const color =
+    new THREE.Color();
+
+const initialAngles = [];
+const radii = [];
+const angularSpeeds = [];
+
+for(let i=0;i<discParticleCount;i++){
+
+    const radius =
+        THREE.MathUtils.randFloat(10,40);
+
+    const angle =
+        THREE.MathUtils.randFloat(
+            0,
+            2*Math.PI
+        );
+
+    const height =
+        THREE.MathUtils.randFloatSpread(
+            4-radius/40
+        );
+
+    positions[i*3] =
+        radius*Math.cos(angle);
+
+    positions[i*3+1] =
+        height;
+
+    positions[i*3+2] =
+        radius*Math.sin(angle);
+
+    initialAngles.push(angle);
+
+    radii.push(radius);
+
+    angularSpeeds.push(
+        35/Math.sqrt(
+            radius*radius*radius-9.5
+        )
+    );
+
+    const t = radius/40;
+
+    color.setHSL(
+        1.2
+        +0.1*Math.random()
+        -0.4*t,
+
+        0.8,
+
+        0.6-t*0.7
+    );
+
+    colors.set(
+        [color.r,color.g,color.b],
+        i*3
+    );
+}
+
+
+const discGeometry =
+    new THREE.BufferGeometry();
+
+discGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(
+        positions,
+        3
+    )
+);
+
+discGeometry.setAttribute(
+    'color',
+    new THREE.BufferAttribute(
+        colors,
+        3
+    )
+);
+
+const discMaterial =
+    new THREE.PointsMaterial({
+
+        size:0.18,
+
+        vertexColors:true,
+
+        transparent:true,
+
+        opacity:0.22,
+
+        depthWrite:false,
+
+        blending:
+            THREE.AdditiveBlending
+    });
+
+const disc =
+    new THREE.Points(
+        discGeometry,
+        discMaterial
+    );
+
+disc.rotation.x =
+    THREE.MathUtils.degToRad(10);
+
+scene.add(disc);
+
+
+
+// =======================================
+// CENTRAL STAR
+// =======================================
+
+const star =
+    new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+            2.2,
+            64,
+            64
+        ),
+
+        new THREE.MeshBasicMaterial({
+            color:0xfafcff
+        })
+    );
+
+scene.add(star);
+
+
+
+// =======================================
+// GLOW
+// =======================================
+
+const glow =
+    new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+            4.5,
+            64,
+            64
+        ),
+
+        new THREE.MeshBasicMaterial({
+
+            color:0xffaa33,
+
+            transparent:true,
+
+            opacity:0.015,
+
+            blending:
+                THREE.AdditiveBlending,
+
+            depthWrite:false
+        })
+    );
+
+scene.add(glow);
+
+
+
+// =======================================
+// JET AXIS
+// =======================================
+
+const diskTilt =
+    THREE.MathUtils.degToRad(10);
+
+const jetAxis =
+    new THREE.Vector3(
+        0,
+        Math.cos(diskTilt),
+        Math.sin(diskTilt)
+    ).normalize();
+
+
+
+// =======================================
+// BASIS VECTORS
+// =======================================
+
+const perp1 =
+    new THREE.Vector3(1,0,0)
+    .cross(jetAxis)
+    .normalize();
+
+const perp2 =
+    jetAxis.clone()
+    .cross(perp1)
+    .normalize();
+
+
+
+// =======================================
+// COLLIMATED JETS
+// =======================================
+
+const jetParticleCount = 8000;
+
+const jetPositions =
+    new Float32Array(
+        jetParticleCount * 3
+    );
+
+const jetColors =
+    new Float32Array(
+        jetParticleCount * 3
+    );
+
+const jetVelocities = [];
+const jetDirections = [];
+const jetOffsets = [];
+
+const jetColor =
+    new THREE.Color();
+
+for(let i=0;i<jetParticleCount;i++){
+
+    const dir =
+        Math.random()<0.5
+        ? 1
+        : -1;
+
+    const spread = 1;
+
+    const r =
+        Math.random()*spread;
+
+    const theta =
+        Math.random()*2*Math.PI;
+
+    const offset =
+        perp1.clone()
+        .multiplyScalar(
+            r*Math.cos(theta)
+        )
+
+        .add(
+            perp2.clone()
+            .multiplyScalar(
+                r*Math.sin(theta)
+            )
+        );
+
+    const launch =
+        dir*Math.random()*140;
+
+    const base =
+        jetAxis.clone()
+        .multiplyScalar(launch);
+
+    const pos =
+        base.add(offset);
+
+    jetPositions[i*3] = pos.x;
+    jetPositions[i*3+1] = pos.y;
+    jetPositions[i*3+2] = pos.z;
+
+    jetVelocities.push(
+        dir * (
+            0.45
+            + Math.random()*0.55
+        )
+    );
+
+    jetDirections.push(dir);
+
+    jetOffsets.push(offset);
+
+    jetColor.setHSL(
+        0.78,
+        1.0,
+        0.6
+    );
+
+    const brightness =
+        dir === 1
+        ? 1.0
+        : 0.18;
+
+    jetColors[i*3] =
+        jetColor.r * brightness;
+
+    jetColors[i*3+1] =
+        jetColor.g * brightness;
+
+    jetColors[i*3+2] =
+        jetColor.b * brightness;
+}
+
+
+const jetGeometry =
+    new THREE.BufferGeometry();
+
+jetGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(
+        jetPositions,
+        3
+    )
+);
+
+jetGeometry.setAttribute(
+    'color',
+    new THREE.BufferAttribute(
+        jetColors,
+        3
+    )
+);
+
+const jetMaterial =
+    new THREE.PointsMaterial({
+
+        size:0.25,
+
+        vertexColors:true,
+
+        transparent:true,
+
+        opacity:0.35,
+
+        depthWrite:false,
+
+        blending:
+            THREE.AdditiveBlending
+    });
+
+const jets =
+    new THREE.Points(
+        jetGeometry,
+        jetMaterial
+    );
+
+scene.add(jets);
+
+
+
+// =======================================
+// MOVE WHOLE SYSTEM
+// =======================================
+
+const systemOffset =
+    new THREE.Vector3(
+        10,
+        -12,
+        5
+    );
+
+disc.position.copy(systemOffset);
+
+star.position.copy(systemOffset);
+
+glow.position.copy(systemOffset);
+
+jets.position.copy(systemOffset);
+
+
+
+// =======================================
+// BLOOM
+// =======================================
+
+const composer =
+    new EffectComposer(renderer);
+
+composer.addPass(
+    new RenderPass(scene,camera)
+);
+
+composer.addPass(
+    new UnrealBloomPass(
+
+        new THREE.Vector2(
+            window.innerWidth,
+            window.innerHeight
+        ),
+
+        0.9,
+        0.35,
+        0.12
+    )
+);
+
+
+
+// =======================================
+// ANIMATION
+// =======================================
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+    const elapsedTime =
+        performance.now()*0.0001;
+
+
+
+    // =======================================
+    // CAMERA DRIFT
+    // =======================================
+
+    camera.position.x =
+        -5
+        + Math.sin(performance.now()*0.00008)*1.5;
+
+    camera.position.y =
+        10
+        + Math.cos(performance.now()*0.00006)*1.2;
+
+
+
+    // =======================================
+    // STARFIELD
+    // =======================================
+
+    stars.rotation.y += 0.00008;
+
+    stars.material.opacity =
+        0.65
+        + 0.15*Math.sin(
+            performance.now()*0.00025
+        );
+
+
+
+    // =======================================
+    // DISK ROTATION
+    // =======================================
+
+    const pos =
+        discGeometry.attributes.position.array;
+
+    for(let i=0;i<discParticleCount;i++){
+
+        let angle =
+            initialAngles[i]
+            - angularSpeeds[i]
+            * elapsedTime;
+
+        let r = radii[i];
+
+        pos[i*3] =
+            r*Math.cos(angle);
+
+        pos[i*3+2] =
+            r*Math.sin(angle);
+    }
+
+    discGeometry
+        .attributes
+        .position
+        .needsUpdate = true;
+
+
+
+    // =======================================
+    // STAR PULSE
+    // =======================================
+
+    star.material.opacity =
+        0.68
+        + 0.16*Math.sin(
+            performance.now()*0.0007
+        );
+
+
+
+    // =======================================
+    // JET ANIMATION
+    // =======================================
+
+    const jetPos =
+        jetGeometry.attributes.position.array;
+
+    for(let i=0;i<jetParticleCount;i++){
+
+        const dir =
+            jetDirections[i];
+
+        const speed =
+            jetVelocities[i];
+
+        jetPos[i*3] +=
+            jetAxis.x * speed;
+
+        jetPos[i*3+1] +=
+            jetAxis.y * speed;
+
+        jetPos[i*3+2] +=
+            jetAxis.z * speed;
+
+        const dist =
+            Math.sqrt(
+                jetPos[i*3]**2 +
+                jetPos[i*3+1]**2 +
+                jetPos[i*3+2]**2
+            );
+
+        const widen =
+            0.08 * dist;
+
+        jetPos[i*3] +=
+            (Math.random()-0.5)
+            * widen;
+
+        jetPos[i*3+1] +=
+            (Math.random()-0.5)
+            * widen;
+
+        jetPos[i*3+2] +=
+            (Math.random()-0.5)
+            * widen;
+
+        if(dist > 140){
+
+            const launch =
+                dir*Math.random()*2;
+
+            const base =
+                jetAxis.clone()
+                .multiplyScalar(launch);
+
+            const offset =
+                jetOffsets[i];
+
+            const p =
+                base.add(offset);
+
+            jetPos[i*3] = p.x;
+            jetPos[i*3+1] = p.y;
+            jetPos[i*3+2] = p.z;
+        }
+    }
+
+    jetGeometry
+        .attributes
+        .position
+        .needsUpdate = true;
+
+
+
+    // =======================================
+    // BLOOM PULSE
+    // =======================================
+
+    composer.passes[1].strength =
+        0.9
+        + 0.08*Math.sin(
+            performance.now()*0.001
+        );
+
+
+
+    renderer.clear();
+
+    composer.render();
+}
+
+animate();
+
+
+
+// =======================================
+// RESIZE
+// =======================================
+
+window.addEventListener(
+    'resize',
+    ()=>{
+
+        camera.aspect =
+            window.innerWidth
+            /window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+    }
+);
+
+</script>
+
+
+
+
+
+</body>
+</html>

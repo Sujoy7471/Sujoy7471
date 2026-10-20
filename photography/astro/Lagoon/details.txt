@@ -1,0 +1,12 @@
+Stacked 25 images
+Specs of each image:
+exp 1.6s
+iso 1600
+f/1.8
+
+date: 14 sep, 2026
+loc: TIFR Mumbai
+
+Device: Realme 12 Pro Plus and GSO 8 inch dobsonian telescope.
+
+Stacking method: Sequator

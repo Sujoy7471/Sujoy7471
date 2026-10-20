@@ -1,0 +1,26 @@
+Single shot
+Specs of each image:
+
+im1.jpg
+27 feb 2026, 
+Iso 100, shutter 1/320 f/1.8
+
+im2.jpg
+4 dec 2025
+Iso 320, shutter 1/120, f/2.8
+
+im3.jpg
+25 sep 2026
+Iso 100, shutter 1/100, f/1.8
+
+im4.jpg
+30 sep 2026
+Iso 2000, 1/17 s, f/1.8
+It was actually red
+
+
+loc: TIFR Mumbai
+
+Device: Realme 12 Pro Plus, gso telescope
+
+Edited with Snapseed

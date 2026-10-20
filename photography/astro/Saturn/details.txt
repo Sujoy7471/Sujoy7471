@@ -1,0 +1,19 @@
+Single shot
+Specs of each image:
+
+im1.jpg
+exp 1/5s
+iso 6400
+f/1.8
+
+im2.jpg
+exp 1/15s
+iso 160
+f/1.8
+
+date: 26 april, 2026
+loc: TIFR Mumbai
+
+Device: Realme 12 Pro Plus, gso telescope
+
+Edited with Snapseed

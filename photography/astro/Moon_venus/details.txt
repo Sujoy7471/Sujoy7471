@@ -1,0 +1,19 @@
+Single shot
+Specs of each image:
+
+im1.jpg
+exp 1/13s
+iso 3200
+f/1.8
+
+im2.jpg
+exp 1/13s
+iso 100   (Brightness reduced for venus)
+f/1.8
+
+date: 14 sep, 2026
+loc: TIFR Mumbai
+
+Device: Realme 12 Pro Plus, gso telescope
+
+Edited with Snapseed and picsart

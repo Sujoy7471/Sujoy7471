@@ -1,0 +1,12 @@
+Stacked 39 images
+Specs of each image:
+exp 1.3s
+iso 1600
+f/1.8
+
+date: 23 jan, 2026
+loc: TIFR Mumbai
+
+Device: Realme 12 Pro Plus and GSO 8 inch dobsonian telescope.
+
+Stacking method: Python (helped by chatgpt)

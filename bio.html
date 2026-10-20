@@ -65,6 +65,8 @@ canvas{
 
 .main-container{
 
+    animation:fadeIn 2s ease;
+
     width:100%;
 
     min-height:100vh;
@@ -431,6 +433,8 @@ canvas{
 
 .back-button{
 
+    animation:fadeIn 2s ease;
+
     position:fixed;
 
     top:26px;
@@ -510,6 +514,25 @@ canvas{
     }
 }
 
+
+
+/* =======================================
+   ANIMATION
+======================================= */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0px);
+    }
+}
+
 </style>
 </head>
 
@@ -578,23 +601,18 @@ canvas{
 
                 <div class="bio-text">
 
-                    I am a Research Scholar in Astronomy and Astrophysics at
-                    TIFR Mumbai with interests spanning observational astronomy,
-                    astronomical instrumentation, spectroscopy, and computational
-                    astrophysics.
+                    I am an Integrated PhD student in the Department of Astronomy &amp;
+                    Astrophysics at TIFR Mumbai, working in infrared astronomy at the
+                    crossroads of astrophysics and astrochemistry using both data
+                    analysis and simulations.
 
-                    My work combines scientific programming, observational data analysis,
-                    and independent instrumentation projects focused on optical
-                    spectroscopy and astronomical imaging.
+                    <br><br>
 
-                    I am particularly interested in building low-cost scientific
-                    instrumentation, numerical simulations, and exploring observational
-                    techniques across different wavelength regimes including radio
-                    astronomy and interferometric methods.
-
-                    Beyond formal academic work, I actively pursue independent scientific
-                    explorations involving astrophysical simulations, data-driven modeling,
-                    and experimental visualization systems.
+                    I also love building instruments, from a homemade stellar
+                    spectrograph to phone astrophotography through various amateur
+                    telescopes, and I keep exploring short side projects in
+                    simulation, instrumentation and data analysis, from galaxy
+                    distances to exoplanet transits.
 
                 </div>
 
@@ -704,26 +722,6 @@ canvas{
                     Astropy • Git • LaTeX<br>
                     Mac • Linux • Windows<br>
                     
-
-                </div>
-
-            </div>
-
-
-
-            <div class="info-card">
-
-                <div class="info-title">
-                    Projects
-                </div>
-
-                <div class="info-content">
-
-                    • Surface Brightness Fluctuation Pipeline<br>
-                    <br>
-                    • Exoplanet Transit Modeling<br>
-                    <br>
-                    • Stellar Spectrometer Construction<br>
 
                 </div>
 

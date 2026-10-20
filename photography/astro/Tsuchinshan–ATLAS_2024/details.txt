@@ -1,0 +1,19 @@
+Single shot
+Specs of each image:
+
+im1.jpg
+exp 30s
+iso 800
+f/1.8
+
+im2.jpg
+exp 30s
+iso 800
+f/1.8
+
+date: 21 oct, 2024
+loc: TIFR Mumbai
+
+Device: Realme 12 Pro Plus
+
+Edited with Snapseed
